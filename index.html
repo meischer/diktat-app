@@ -385,8 +385,10 @@ function scoreVoice(v, lang) {
   if (v.localService) score += 10;
   // Avoid "compact" (lowest quality on Apple)
   if (name.includes('compact')) score -= 50;
-  // Prefer voices that exactly match lang
-  if (v.lang === lang) score += 20;
+  // Strongly prefer exact locale match (e.g. en-US over en-AU)
+  if (v.lang === lang) score += 50;
+  // Penalise wrong region
+  else if (v.lang.startsWith(langBase)) score -= 10;
   return score;
 }
 
